@@ -1,10 +1,22 @@
-var canvas1 = document.getElementById("example");
-var canvas2 = document.getElementById("newgraph");
-var optionlist = document.getElementsByClassName("nodelist");
+//prepare svg
+var svgRect = document.getElementById("example").childNodes[3];
+var canvasWidth = $(svgRect).width();
+var canvasHeight = $(svgRect).height();
+
+var svgEg = document.getElementById("example").childNodes[3].childNodes[1];
+var svgNew = document.getElementById("newgraph").childNodes[3].childNodes[1];
+
+//$(svgEg).width(canvasWidth);
+//$(svgEg).height(canvasHeight);
+$(svgNew).width(canvasWidth);
+$(svgNew).height(canvasHeight);
+
+//graph property
 var r = 5
 var linewidth = 1
-var canvasWidth = 300;
-var canvasHeight = 100;
+
+//get all the nodes for workers to select
+var optionlist = document.getElementsByClassName("nodelist");
 var doc1 = document.getElementById("doc1");
 var nodes = doc1.getElementsByTagName("em");
 var xs = [];
@@ -39,19 +51,32 @@ for(i = 0; i < nodes.length; i++){
       color = "#33CCFF";
   }
 
-  var x = (50+349*i*i)%canvasWidth;
+  x = canvasWidth/2-30+Math.sin(360/(nodes.length-3)*i)*(canvasWidth-100)/2;
   xs.push(x);
-  var y = (50+273*i*i*i)%canvasHeight;
+  y = canvasHeight/2+Math.cos(360/(nodes.length-3)*i)*(canvasHeight-100)/2;
   ys.push(y);
-  canvas1.innerHTML += "<circle cx=" + x + " cy=" + y + " r=" + r + " stroke=\"black\" stroke-width="+ linewidth + " fill="+color+" />";
-  canvas1.innerHTML += "<text x=" + x + " y=" + y + " fill=\"black\">"+nodes[i].innerHTML+"</text>"
-  optionlist[0].innerHTML += "<option>"+nodes[i].innerHTML+"</option>"
+  svgNew.innerHTML += "<circle cx=" + x + " cy=" + y + " r=" + r + " stroke=\"black\" stroke-width="+ linewidth + " fill="+color+" />";
+  svgNew.innerHTML += "<text x=" + x + " y=" + y + " fill=\"black\">"+nodes[i].innerHTML+"</text>"
+  optionlist[0].innerHTML += "<option value="+i+">"+nodes[i].innerHTML+"</option>"
 }
 
-canvas2.innerHTML = canvas1.innerHTML;
+//svgEg.innerHTML = svgNew.innerHTML;
+
 optionlist[1].innerHTML = optionlist[0].innerHTML;
-canvas1.innerHTML += "<path id=\"demo\" d=\"M"+xs[0]+" "+ys[0]+" "+xs[4]+" "+ys[4]+"\" stroke=\"black\" stroke-width="+linewidth+" fill=\"none\" />";
+//svgEg.innerHTML += "";
 //var demo = document.getElementById("demo");
 function connectDetail(){
   alert("yes!");
 }
+
+$( "button" ).click(function( event ) {
+  i1 = $("#node1").val();
+  i2 = $("#node2").val();
+  edgeNote = $("#edgeNote").val();
+  if (edgeNote == "other"){
+    edgeNote = $("#newNote").val();
+  }
+  edgeNote += "("+$("#docid").val()+")";
+  svgEg.innerHTML += "<path d=\"M"+xs[i1]+" "+ys[i1]+" l"+xs[i2]+" "+ys[i2]+"\" stroke=\"black\" stroke-width="+linewidth+" fill=\"none\" /><text x="+(xs[i1]+xs[i2])/2+" y="+(ys[i1]+ys[i2])/2+" fill=\"red\">"+edgeNote+"</text>";
+
+});
