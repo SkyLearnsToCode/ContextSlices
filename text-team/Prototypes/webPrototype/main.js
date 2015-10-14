@@ -85,11 +85,9 @@ function editEdge(o){
   if (confirm("Do you want to delete this Edge?") == true){
     o.parentNode.removeChild(o.previousSibling);
     o.parentNode.removeChild(o);
-  }else{
-    var newNote = prompt("Please enter new edge note", o.innerHTML);
-    if (newNote != o.innerHTML){
-      o.innerHTML = newNote;
-    }
   }
+}
 
+function  changeContent(obj){
+  o.innerHTML = obj.previousSibling.val();
 }
