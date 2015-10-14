@@ -55,7 +55,7 @@ for(i = 0; i < nodes.length; i++){
   xs.push(x);
   y = canvasHeight/2+Math.cos(360/(nodes.length-3)*i)*(canvasHeight-100)/2;
   ys.push(y);
-  svgNew.innerHTML += "<circle cx=" + x + " cy=" + y + " r=" + r + " stroke=\"black\" stroke-width="+ linewidth + " fill="+color+" />";
+  svgNew.innerHTML += "<circle id=" + i + " cx=" + x + " cy=" + y + " r=" + r + " stroke=\"black\" stroke-width="+ linewidth + " fill="+color+" />";
   svgNew.innerHTML += "<text x=" + x + " y=" + y + " fill=\"black\">"+nodes[i].innerHTML+"</text>"
   optionlist[0].innerHTML += "<option value="+i+">"+nodes[i].innerHTML+"</option>"
 }
@@ -77,6 +77,19 @@ $( "button" ).click(function( event ) {
     edgeNote = $("#newNote").val();
   }
   edgeNote += "("+$("#docid").val()+")";
-  svgEg.innerHTML += "<path d=\"M"+xs[i1]+" "+ys[i1]+" l"+xs[i2]+" "+ys[i2]+"\" stroke=\"black\" stroke-width="+linewidth+" fill=\"none\" /><text x="+(xs[i1]+xs[i2])/2+" y="+(ys[i1]+ys[i2])/2+" fill=\"red\">"+edgeNote+"</text>";
+  svgNew.innerHTML += "<path d=\"M"+xs[i1]+" "+ys[i1]+" "+xs[i2]+" "+ys[i2]+"\" stroke=\"black\" stroke-width="+linewidth+" fill=\"none\"/><text x="+(xs[i1]+xs[i2])/2+" y="+(ys[i1]+ys[i2])/2+" fill=\"red\" onclick=\"editEdge(this)\">"+edgeNote+"</text>";
 
 });
+
+function editEdge(o){
+  if (confirm("Do you want to delete this Edge?") == true){
+    o.parentNode.removeChild(o.previousSibling);
+    o.parentNode.removeChild(o);
+  }else{
+    var newNote = prompt("Please enter new edge note", o.innerHTML);
+    if (newNote != o.innerHTML){
+      o.innerHTML = newNote;
+    }
+  }
+
+}
